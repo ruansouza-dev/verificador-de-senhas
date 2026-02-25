@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Verificador de Senha</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 350px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    .strength-bar {
+      height: 10px;
+      width: 100%;
+      background: #eee;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      transition: 0.3s;
+    }
+
+    .feedback {
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .level {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Verificador de Senha</h1>
+  <input type="password" id="password" placeholder="Digite sua senha">
+  
+  <div class="strength-bar">
+    <div class="strength-fill" id="strengthFill"></div>
+  </div>
+
+  <div class="level" id="levelText"></div>
+  <div class="feedback" id="feedback"></div>
+</div>
+
+<script>
+  const passwordInput = document.getElementById("password");
+  const strengthFill = document.getElementById("strengthFill");
+  const levelText = document.getElementById("levelText");
+  const feedback = document.getElementById("feedback");
+
+  passwordInput.addEventListener("input", () => {
+    const password = passwordInput.value;
+    let score = 0;
+    let tips = [];
+
+    if (password.length >= 8) score++;
+    else tips.push("Use pelo menos 8 caracteres.");
+
+    if (/[A-Z]/.test(password)) score++;
+    else tips.push("Inclua letra maiúscula.");
+
+    if (/[a-z]/.test(password)) score++;
+    else tips.push("Inclua letra minúscula.");
+
+    if (/[0-9]/.test(password)) score++;
+    else tips.push("Inclua números.");
+
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    else tips.push("Inclua símbolos especiais.");
+
+    const percent = (score / 5) * 100;
+    strengthFill.style.width = percent + "%";
+
+    if (score <= 2) {
+      strengthFill.style.background = "red";
+      levelText.textContent = "Senha Fraca";
+    } else if (score <= 4) {
+      strengthFill.style.background = "orange";
+      levelText.textContent = "Senha Média";
+    } else {
+      strengthFill.style.background = "green";
+      levelText.textContent = "Senha Forte";
+    }
+
+    feedback.innerHTML = tips.join("<br>");
+  });
+</script>
+
+</body>
+</html>
